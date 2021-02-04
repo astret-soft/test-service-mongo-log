@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  mongo-db:  # https://hub.docker.com/_/mongo
+    restart: always
+    image: mongo:4.0.4
+    ports:
+      - 27017:27017
+  vehicle-emulator:
+    restart: always
+    image: mongo:4.0.4
+    ports:
+      - 8080:8080
+  service-mongo-log:
+    restart: always
+    image: service-mongo-log:0.1
+    command: python manage.py -v run --docker
+    depends_on:
+      - mongo-db
+      - vehicle-emulator
+    links:
+      - mongo-db
+      - vehicle-emulator
+    ports:
+      - 65333:65333
